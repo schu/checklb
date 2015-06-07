@@ -63,7 +63,7 @@ Options:
 			}
 			addrs, err := net.LookupIP(target)
 			if err != nil {
-				fmt.Fprintf(os.Stderr, formatError("Failed to resolve %s\n%s\n", target, err))
+				fmt.Fprint(os.Stderr, formatError("Failed to resolve %s\n%s\n", target, err))
 				os.Exit(1)
 			}
 			mutex.Lock()
@@ -92,13 +92,13 @@ Options:
 			client := &http.Client{Transport: transport}
 			req, err := http.NewRequest("GET", fmt.Sprintf("%s://[%s]", proto, target.String()), nil)
 			if err != nil {
-				fmt.Fprintf(os.Stderr, formatError("Failed to prepare HTTP request\n%s\n", err))
+				fmt.Fprint(os.Stderr, formatError("Failed to prepare HTTP request\n%s\n", err))
 				os.Exit(1)
 			}
 			req.Host = host
 			resp, err := client.Do(req)
 			if err != nil {
-				fmt.Fprintf(os.Stderr, formatError("HTTP request failed\n%s\n", err))
+				fmt.Fprint(os.Stderr, formatError("HTTP request failed\n%s\n", err))
 				os.Exit(1)
 			}
 			defer resp.Body.Close()
