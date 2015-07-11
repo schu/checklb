@@ -18,14 +18,15 @@ func main() {
 	usage := `checklb - send a HTTP request to a number of targets
 
 <target> can be an IP address or a domain name. The latter will be
-resolved to send a request to each IP. If no target is given, <host>
-will be resolved as target.
+resolved to send a request to each IP. If no target is given,
+<host-header> will be resolved as target.
 
 Usage:
-  checklb [options] <host> [<target>...]
+  checklb [options] <host-header> [<target>...]
 
 Options:
-  --https  Send https request (default: http)
+  --https        Send https request (default: http)
+  --path=<path>  Path to request [default: /]
 `
 
 	formatError := color.New(color.FgRed).SprintfFunc()
@@ -33,7 +34,8 @@ Options:
 
 	args, _ := docopt.Parse(usage, nil, true, fmt.Sprintf("checklb %s", Version), false)
 
-	host := args["<host>"].(string)
+	host := args["<host-header>"].(string)
+	path := args["--path"].(string)
 
 	proto := "http"
 	if args["--https"].(bool) {
@@ -90,7 +92,7 @@ Options:
 				transport.TLSClientConfig = &tls.Config{ServerName: host}
 			}
 			client := &http.Client{Transport: transport}
-			req, err := http.NewRequest("GET", fmt.Sprintf("%s://[%s]", proto, target.String()), nil)
+			req, err := http.NewRequest("GET", fmt.Sprintf("%s://[%s]%s", proto, target.String(), path), nil)
 			if err != nil {
 				fmt.Fprint(os.Stderr, formatError("Failed to prepare HTTP request\n%s\n", err))
 				os.Exit(1)
