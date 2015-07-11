@@ -1,4 +1,4 @@
-version = $(shell git describe --tags --always)
+version = $(shell git describe --tags --always --dirty)
 
 all: build
 
