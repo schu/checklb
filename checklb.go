@@ -29,10 +29,10 @@ Options:
   --path=<path>  Path to request [default: /]
 `
 
+	args, _ := docopt.Parse(usage, nil, true, fmt.Sprintf("checklb %s", Version), false)
+
 	formatError := color.New(color.FgRed).SprintfFunc()
 	formatWarning := color.New(color.FgYellow).SprintfFunc()
-
-	args, _ := docopt.Parse(usage, nil, true, fmt.Sprintf("checklb %s", Version), false)
 
 	host := args["<host-header>"].(string)
 	path := args["--path"].(string)
